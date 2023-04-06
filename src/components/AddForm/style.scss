@@ -1,0 +1,23 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+
+    &__input {
+        padding: 5px 5px;
+        border-radius: 20px;
+        border: 3px solid #FDE1D1;
+    }
+
+    &__button {
+        padding: 5px 5px;
+        border-radius: 20px;
+        border: none;
+        background-color: #FDE1D1;
+    }
+
+    & * {
+        font-size: 20px;
+    }
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { saveColorsInLocalStorage } from "../../utilities/localStorage";
+import "./style.scss";
 
 interface MyProps {
   setColors: React.Dispatch<React.SetStateAction<Array<string>>>;
@@ -49,14 +50,15 @@ const AddForm = ({ setColors }: MyProps) => {
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <form onSubmit={onFormSubmit} className="form">
       <input
         value={color}
         type="text"
         placeholder="color e.g. #FFFFFF"
         onChange={onInputChange}
+        className="form__input"
       />
-      <button>Add color</button>
+      <button className="form__button">Add color</button>
     </form>
   );
 };
