@@ -1,15 +1,11 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from "react";
 
 interface MyProps {
-    children: ReactNode
+  children: ReactNode;
 }
 
-const Container = ({children}: MyProps) => {
-  return (
-    <div>
-        {children}
-    </div>
-  )
-}
+const Container = ({ children }: MyProps) => {
+  return <div>{children}</div>;
+};
 
-export default Container
+export default Container;
