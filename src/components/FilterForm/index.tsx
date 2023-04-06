@@ -3,6 +3,7 @@ import { hexToRgb } from "../../utilities/hexToRgb";
 import { rgbToHex } from "../../utilities/rgbToHex";
 import { getSaturation } from "../../utilities/getSaturation";
 import { sortColors } from "../../utilities/sortColors";
+import "./style.scss";
 
 interface MyProps {
   setColors: React.Dispatch<React.SetStateAction<Array<string>>>;
