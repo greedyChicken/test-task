@@ -1,14 +1,24 @@
 import React, { useState } from "react";
+import { saveColorsInLocalStorage } from "../../utilities/localStorage";
 
-// interface MyFormProps {
-// 	onSubmit: (event: React.FormEvent) => void
-// }
+interface MyProps {
+  setColors: React.Dispatch<React.SetStateAction<Array<string>>>;
+}
 
-const AddForm = () => {
+const AddForm = ({ setColors }: MyProps) => {
   const [color, setColor] = useState("");
 
   const onFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    if (color.length === 4 || color.length === 7) {
+      setColors((colors) => {
+        saveColorsInLocalStorage([...colors, color]);
+        return [...colors, color];
+      });
+      setColor("");
+    } else {
+      alert("not legal color");
+    }
   };
 
   const onInputChange = ({
@@ -16,6 +26,7 @@ const AddForm = () => {
   }: React.ChangeEvent<HTMLInputElement>) => {
     const validFirstChar = "#";
     const validator = /^#?([A-Fa-f0-9]){0,6}$/;
+    value = value.toUpperCase();
 
     switch (color.length) {
       case 0:
