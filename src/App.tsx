@@ -15,17 +15,11 @@ const App = () => {
   }, [allColors]);
 
   return (
-    <div className="App">
-      <Container>
-        <AddForm setColors={setAllColors} />
-        <FilterForm setColors={setColors} allColors={allColors} />
-        <ColorsList
-          colors={colors}
-          setColors={setColors}
-          allColors={allColors}
-        />
-      </Container>
-    </div>
+    <Container>
+      <AddForm setColors={setAllColors} />
+      <FilterForm setColors={setColors} allColors={allColors} />
+      <ColorsList colors={colors} setColors={setColors} allColors={allColors} />
+    </Container>
   );
 };
 
