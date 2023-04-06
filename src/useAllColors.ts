@@ -5,7 +5,7 @@ const useAllColors = () => {
   const [allColors, setAllColors] = useState(() => {
     const newColors = getColorsFromLocalStorage();
     return newColors.length === 0
-      ? ["#FF1000", "#00FF00", "#0000FF"]
+      ? ["#FF0000", "#00FF00", "#0000FF"]
       : newColors;
   });
 
