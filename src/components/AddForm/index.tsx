@@ -17,8 +17,6 @@ const AddForm = ({ setColors }: MyProps) => {
         return [...colors, color];
       });
       setColor("");
-    } else {
-      alert("not legal color");
     }
   };
 
@@ -54,7 +52,7 @@ const AddForm = ({ setColors }: MyProps) => {
       <input
         value={color}
         type="text"
-        placeholder="color e.g. #FFFFFF"
+        placeholder="color e.g. #FFFFFF or #FFF"
         onChange={onInputChange}
         className="form__input"
       />
