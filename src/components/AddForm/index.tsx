@@ -2,20 +2,24 @@ import React, { useState } from "react";
 import { saveColorsInLocalStorage } from "../../utilities/localStorage";
 import "./style.scss";
 
-interface MyProps {
-  setColors: React.Dispatch<React.SetStateAction<Array<string>>>;
+interface AddFormProps {
+  setAllColors: React.Dispatch<React.SetStateAction<Array<string>>>;
 }
 
-const AddForm = ({ setColors }: MyProps) => {
+const AddForm = ({ setAllColors }: AddFormProps) => {
   const [color, setColor] = useState("");
 
   const onFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+
     if (color.length === 4 || color.length === 7) {
-      setColors((colors) => {
-        saveColorsInLocalStorage([...colors, color]);
-        return [...colors, color];
+      setAllColors((prevColors) => {
+        const newColors = [...prevColors, color];
+        saveColorsInLocalStorage(newColors);
+
+        return newColors;
       });
+
       setColor("");
     }
   };
