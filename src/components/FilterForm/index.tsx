@@ -1,44 +1,59 @@
-import { useEffect, useState } from "react";
-import { hexToRgb } from "../../utilities/hexToRgb";
-import { rgbToHex } from "../../utilities/rgbToHex";
-import { getSaturation } from "../../utilities/getSaturation";
-import { sortColors } from "../../utilities/sortColors";
+import { useEffect, useReducer } from "react";
 import "./style.scss";
+import { filterColors } from "../../utilities/filterColors";
+import { coreColors } from "../../coreColors";
+import { State } from "../../utilities/stateInterface";
 
-interface MyProps {
+interface FilterFormProps {
   setColors: React.Dispatch<React.SetStateAction<Array<string>>>;
   allColors: string[];
+  setCoreColors: React.Dispatch<React.SetStateAction<Array<string>>>;
 }
 
-const FilterForm = ({ setColors, allColors }: MyProps) => {
-  const [redFilter, setRedFilter] = useState(false);
-  const [greenFilter, setGreenFilter] = useState(false);
-  const [blueFilter, setBlueFilter] = useState(false);
-  const [saturationFilter, setSaturationFilter] = useState(false);
+type Action =
+  | { type: "redFilter" }
+  | { type: "greenFilter" }
+  | { type: "blueFilter" }
+  | { type: "saturationFilter" }
+  | { type: "setAllFalse" };
 
-  const filterColors = () => {
-    let newColors = allColors.map((color) => hexToRgb(color));
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case "redFilter":
+      return { ...state, redFilter: !state.redFilter };
+    case "greenFilter":
+      return { ...state, greenFilter: !state.greenFilter };
+    case "blueFilter":
+      return { ...state, blueFilter: !state.blueFilter };
+    case "saturationFilter":
+      return { ...state, saturationFilter: !state.saturationFilter };
+    default:
+      throw new Error();
+  }
+};
 
-    if (redFilter) {
-      newColors = newColors.filter((color) => color[0] > 127);
-    }
-    if (greenFilter) {
-      newColors = newColors.filter((color) => color[1] > 127);
-    }
-    if (blueFilter) {
-      newColors = newColors.filter((color) => color[2] > 127);
-    }
-    if (saturationFilter) {
-      newColors = newColors.filter((color) => getSaturation(color) > 0.5);
-    }
-
-    const sortedColors = sortColors(newColors.map((color) => rgbToHex(color)));
-    setColors(sortedColors);
-  };
+const FilterForm = ({
+  setColors,
+  allColors,
+  setCoreColors,
+}: FilterFormProps) => {
+  const [state, dispatch] = useReducer(reducer, {
+    redFilter: false,
+    greenFilter: false,
+    blueFilter: false,
+    saturationFilter: false,
+  });
 
   useEffect(() => {
-    filterColors();
-  }, [redFilter, greenFilter, blueFilter, saturationFilter]);
+    setColors(filterColors({ colors: allColors }, state));
+    setCoreColors(filterColors({ colors: coreColors }, state));
+  }, [
+    state.redFilter,
+    state.greenFilter,
+    state.blueFilter,
+    state.saturationFilter,
+    allColors,
+  ]);
 
   return (
     <form className="filter">
@@ -46,32 +61,32 @@ const FilterForm = ({ setColors, allColors }: MyProps) => {
         {"Red > 50%"}
         <input
           type="checkbox"
-          checked={redFilter}
-          onChange={() => setRedFilter(!redFilter)}
+          checked={state.redFilter}
+          onChange={() => dispatch({ type: "redFilter" })}
         />
       </label>
       <label>
         {"Green > 50%"}
         <input
           type="checkbox"
-          checked={greenFilter}
-          onChange={() => setGreenFilter(!greenFilter)}
+          checked={state.greenFilter}
+          onChange={() => dispatch({ type: "greenFilter" })}
         />
       </label>
       <label>
         {"Blue > 50%"}
         <input
           type="checkbox"
-          checked={blueFilter}
-          onChange={() => setBlueFilter(!blueFilter)}
+          checked={state.blueFilter}
+          onChange={() => dispatch({ type: "blueFilter" })}
         />
       </label>
       <label>
         {"Saturation > 50%"}
         <input
           type="checkbox"
-          checked={saturationFilter}
-          onChange={() => setSaturationFilter(!saturationFilter)}
+          checked={state.saturationFilter}
+          onChange={() => dispatch({ type: "saturationFilter" })}
         />
       </label>
     </form>
