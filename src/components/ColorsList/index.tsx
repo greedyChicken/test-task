@@ -1,36 +1,37 @@
 import React from "react";
 import "./style.scss";
-import { sortColors } from "../../utilities/sortColors";
+import { saveColorsInLocalStorage } from "../../utilities/localStorage";
 
-interface MyProps {
+interface ColorsListProps {
   colors: string[];
   setColors: React.Dispatch<React.SetStateAction<Array<string>>>;
-  allColors: string[];
+  coreColors: string[];
 }
 
-class ColorsList extends React.Component<MyProps> {
-  componentDidMount(): void {
-    const { colors, setColors } = this.props;
-    setColors(sortColors(colors));
-  }
+const ColorsList = ({ colors, setColors, coreColors }: ColorsListProps) => {
+  const removeColor = (color: string) => {
+    setColors((prevColors) => {
+      const colorId = prevColors.indexOf(color);
+      if (colorId !== -1)
+        prevColors = [
+          ...prevColors.slice(0, colorId),
+          ...prevColors.slice(colorId + 1),
+        ];
 
-  componentDidUpdate(prevProps: MyProps) {
-    const { colors, setColors, allColors } = this.props;
-    if (allColors !== prevProps.allColors) {
-      setColors(sortColors(colors));
-    }
-  }
+      saveColorsInLocalStorage(prevColors);
+      return prevColors;
+    });
+  };
 
-  render() {
-    const { colors } = this.props;
-
-    return (
+  return (
+    <>
+      <h3>Core colors</h3>
       <ul className="list">
-        {colors.map((color, index) => {
+        {coreColors.map((color, index) => {
           return (
             <li key={index} className="list__item">
               <div
-                className="rectangle"
+                className="list__rectangle"
                 style={{ "--my-color": color } as React.CSSProperties}
               ></div>
               <span>{color}</span>
@@ -38,8 +39,30 @@ class ColorsList extends React.Component<MyProps> {
           );
         })}
       </ul>
-    );
-  }
-}
+      {colors.length > 0 && <h3>User's colors</h3>}
+      <ul className="list">
+        {colors.map((color, index) => {
+          return (
+            <li key={index} className="list__item">
+              <div className="list__rectangle-wrapper">
+                <div
+                  className="list__rectangle"
+                  style={{ "--my-color": color } as React.CSSProperties}
+                ></div>
+                <button
+                  className="list__button"
+                  onClick={() => removeColor(color)}
+                >
+                  x
+                </button>
+              </div>
+              <span>{color}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+};
 
 export default ColorsList;
