@@ -1,24 +1,29 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddForm from "./components/AddForm";
 import ColorsList from "./components/ColorsList";
 import Container from "./components/Container";
 import FilterForm from "./components/FilterForm";
 import useAllColors from "./useAllColors";
-import { sortColors } from "./utilities/sortColors";
+import { coreColors } from "./coreColors";
 
 const App = () => {
   const { allColors, setAllColors } = useAllColors();
   const [colors, setColors] = useState(allColors);
-
-  useEffect(() => {
-    setColors(sortColors(allColors));
-  }, [allColors]);
+  const [currentCoreColors, setCurrentCoreColors] = useState(coreColors);
 
   return (
     <Container>
-      <AddForm setColors={setAllColors} />
-      <FilterForm setColors={setColors} allColors={allColors} />
-      <ColorsList colors={colors} setColors={setColors} allColors={allColors} />
+      <AddForm setAllColors={setAllColors} />
+      <FilterForm
+        setColors={setColors}
+        allColors={allColors}
+        setCoreColors={setCurrentCoreColors}
+      />
+      <ColorsList
+        colors={colors}
+        setColors={setAllColors}
+        coreColors={currentCoreColors}
+      />
     </Container>
   );
 };
